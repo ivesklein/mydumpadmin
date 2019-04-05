@@ -24,12 +24,20 @@ echo "<<<<<<   Database Dump Report :: `date +%D`  >>>>>>" >> ${LOGFILENAME}
 echo "" >> ${LOGFILENAME}
 echo "DB Name  :: DB Size   Filename" >> ${LOGFILENAME}
 
+### GET GIT TAG ###
+get_git_tag(){
+        cd $GIT_REPO_PATH
+        TAGVERSION=`$GITBIN status | $SED -rn 's/.*HEAD detached at (v[0-9]\.[0-9]\.[0-9]).*/\1/p'`
+        if [ $TAGVERSION == "" ]; then
+                TAGVERSION="NOTAG"
+        fi
+}
+
 ### Make a backup ###
 check_config(){
         [ ! -f $CONFIGFILE ] && close_on_error "Config file not found, make sure config file is correct"
 }
 db_backup(){
-
         if [ "$DB_NAMES" == "ALL" ]; then
 		DATABASES=`$MYSQL $CREDENTIALS -h $MYSQL_HOST -P $MYSQL_PORT -Bse 'show databases' | grep -Ev "^(Database|mysql|performance_schema|information_schema)"$`
         else
@@ -42,7 +50,12 @@ db_backup(){
                 mkdir -p ${LOCAL_BACKUP_DIR}/${cTime}
         for db in $DATABASES
         do
-                FILE_NAME="${db}.${cTime}.gz"
+                echo $TAGVERSION
+                if [ $GIT_ENABLE -eq 1 ]; then
+                        FILE_NAME="${db}.${cTime}.${TAGVERSION}.gz"    
+                else
+                        FILE_NAME="${db}.${cTime}.gz"
+                fi
                 FILE_PATH="${LOCAL_BACKUP_DIR}/${cTime}/"
                 FILENAMEPATH="$FILE_PATH$FILE_NAME"
                 [ $VERBOSE -eq 1 ] && echo -en "Database> $db... \n"
@@ -71,6 +84,7 @@ check_cmds(){
         [ ! -x $MKDIR ] && close_on_error "FILENAME $MKDIR does not exists. Make sure correct path is set in $CONFIGFILE."
         [ ! -x $MYSQLADMIN ] && close_on_error "FILENAME $MYSQLADMIN does not exists. Make sure correct path is set in $CONFIGFILE."
         [ ! -x $GREP ] && close_on_error "FILENAME $GREP does not exists. Make sure correct path is set in $CONFIGFILE."
+        [ ! -x $SED ] && close_on_error "FILENAME $SED does not exists. Make sure correct path is set in $CONFIGFILE."
 	if [ $S3_ENABLE -eq 1 ]; then
 	        [ ! -x $S3CMD ] && close_on_error "FILENAME $S3CMD does not exists. Make sure correct path is set in $CONFIGFILE."
 	fi
@@ -126,6 +140,7 @@ send_report(){
 ### main ####
 check_config
 check_cmds
+get_git_tag
 check_mysql_connection
 db_backup
 send_report
