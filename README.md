@@ -10,14 +10,18 @@ Clone this repository under **/etc** directory.
 
 > git clone https://github.com/tecrahul/mydumpadmin
 
-
+m
 ### Configure setup
 
 Edit **settings.conf** file and update all requied values as per your requirements. You can enable/disable FTP, SFTP backups here.
 
 Now edit **credentials.txt** file and put your mysql server login details
 
+#### AWS S3
 
+run configure and insert credentials
+
+> aws configure
 
 
 ### Execute backup script

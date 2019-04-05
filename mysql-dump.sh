@@ -112,7 +112,7 @@ sftp_backup(){
 s3_backup(){
 	[ $VERBOSE -eq 1 ] && echo "Uploading backup file to S3 Bucket"
 	cd ${FILE_PATH}
-	$S3CMD --access_key="$AWS_ACCESS_KEY" --secret_key="$AWS_SECRET_ACCESS_KEY" put "$FILE_NAME" s3://${S3_BUCKET_NAME}/${S3_UPLOAD_LOCATION}/
+	$S3CMD s3 cp "$FILE_NAME" s3://${S3_BUCKET_NAME}/${S3_UPLOAD_LOCATION}/
 }
 
 
