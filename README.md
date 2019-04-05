@@ -19,8 +19,9 @@ Now edit **credentials.txt** file and put your mysql server login details
 
 #### AWS S3
 
-run configure and insert credentials
+Run configure and insert credentials(in root enviroment)
 
+> sudo su
 > aws configure
 
 
@@ -39,5 +40,6 @@ Run the following commands step by step to execute this script.
 
 You can also schedule this to run on daily basis using crontab. Add the following settings to crontab to run on 2:00 AM daily.
 
-> 0 2 * * * cd /etc/mydumpadmin && ./mysql-dump.sh
+> sudo crontab -e
 
+> 0 2 * * * cd /etc/mydumpadmin && ./mysql-dump.sh

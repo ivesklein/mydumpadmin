@@ -52,9 +52,9 @@ db_backup(){
         do
                 echo $TAGVERSION
                 if [ $GIT_ENABLE -eq 1 ]; then
-                        FILE_NAME="${db}.${cTime}.${TAGVERSION}.gz"    
+                        FILE_NAME="${SUBDOMAIN}.${db}.${cTime}.${TAGVERSION}.gz"    
                 else
-                        FILE_NAME="${db}.${cTime}.gz"
+                        FILE_NAME="${SUBDOMAIN}.${db}.${cTime}.gz"
                 fi
                 FILE_PATH="${LOCAL_BACKUP_DIR}/${cTime}/"
                 FILENAMEPATH="$FILE_PATH$FILE_NAME"
