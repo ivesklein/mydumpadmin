@@ -8,7 +8,7 @@ Clone this repository under **/etc** directory.
 
 > cd /etc/
 
-> git clone https://github.com/tecrahul/mydumpadmin
+> git clone https://github.com/ivesklein/mydumpadmin
 
 m
 ### Configure setup
